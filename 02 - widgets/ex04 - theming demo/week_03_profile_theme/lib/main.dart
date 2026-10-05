@@ -11,6 +11,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+          // note: we'll use ColorScheme.fromSeed, not the deprecated ColorScheme.fromSwatch
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.blue)
           ),

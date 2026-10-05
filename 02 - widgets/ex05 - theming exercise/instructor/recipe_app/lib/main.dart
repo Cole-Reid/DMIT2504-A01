@@ -11,51 +11,89 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // If I want to reference the color scheme in component-specific props in the theme data,
+    // I need to create the colorScheme ahead of time, otherwise it's being created at the same time as
+    // other ThemeData props are trying to reference it.
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: Colors.pink,
+      brightness: Brightness.dark,
+    );
+
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.blueGrey.shade200,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch, // like a flexbox!
-                              // .stretch alignment means children fill the entire width
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: const Text(
-                'My Recipe App',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                )
-              ),
-            ),
-            Image.asset(
-              'assets/images/cool.jpg',
-              height: 480,
-            ),
-            const ListWithHeading(
-              heading: "Ingredients",
-              listItems: [
-                "- some ingredient",
-                "- some ingredient",
-                "- some ingredient",
-                "- some ingredient",
-                "- some ingredient",
-              ]
-            ),
-            const ListWithHeading(
-              heading: "Instructions",
-              listItems: [
-                '1. take your cream and behold it',
-                '2. whip it good',
-                '3. dip a strawberry',
-              ]
-            ),
-          ],
+      theme: ThemeData(
+        colorScheme: colorScheme,
+        scaffoldBackgroundColor: colorScheme.primaryContainer,
+        textTheme: TextTheme(
+          // I want centralised styling for my text (see 'red side' of diff for potential pitfalls),
+          // so basically what I'm doing is creating 'bootstrap-like' reusable classes that I'm going to
+          // slap onto various text fields wherever they appear (including outside this component's direct scope).
+          headlineLarge: TextStyle(
+            fontSize: 44,
+            color: colorScheme.primary,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.secondary,
+          ),
         ),
+        // in class, we talked about considering the difference between e.g.
+        // using a primary colour directly, or things like primaryContainer, onPrimary, etc. (see docs),
+        // and helps illustrate why it's important to consider those relationships (play with component <-> colours)
+
+      ),
+      home: RecipePage(),
+    );
+  }
+}
+
+
+class RecipePage extends StatelessWidget {
+
+  const RecipePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch, // like a flexbox!
+                            // .stretch alignment means children fill the entire width
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'my cool recipe app',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ),
+          Image.asset(
+            'assets/images/cool.jpg',
+            height: 480,
+          ),
+          const ListWithHeading(
+            heading: "Ingredients",
+            listItems: [
+              "- some ingredient",
+              "- some ingredient",
+              "- some ingredient",
+              "- some ingredient",
+              "- some ingredient",
+            ]
+          ),
+          const ListWithHeading(
+            heading: "Instructions",
+            listItems: [
+              '1. take your cream and behold it',
+              '2. whip it good',
+              '3. dip a strawberry',
+            ]
+          ),
+        ],
       ),
     );
   }
+
 }
 
 
@@ -73,9 +111,6 @@ class ListWithHeading extends StatelessWidget {
   final String       heading;
   final List<String> listItems;
 
-  static const headingStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
-
-
   // 3. I need to write a build method that returns that group of elements
   @override
   Widget build(BuildContext context) {
@@ -88,7 +123,7 @@ class ListWithHeading extends StatelessWidget {
           Text(
             heading,
             textAlign: TextAlign.center,
-            style: headingStyle,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           for (final item in listItems) Text(item),
         ],
