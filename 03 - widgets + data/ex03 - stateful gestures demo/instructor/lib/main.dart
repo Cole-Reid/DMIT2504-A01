@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'widgets/page_title.dart';
 import 'widgets/random_dog_image.dart';
 // relative import. I'm in lib/, so the direct relative path is ./widgets/blahblah.dart
 
@@ -24,7 +25,12 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
-          child: RandomDogImage()
+          child: Column(
+            children: <Widget>[
+              PageTitle('DO U LIEK TEHSE DOGS?!??!11'),
+              RandomDogImage(),
+            ]
+          ),    
         ),
       ),
     );
