@@ -19,6 +19,8 @@ class RandomDogImage extends StatefulWidget {
 class _RandomDogImageState extends State<RandomDogImage> {
 
   String dogImageUrl = '';
+  int    likes       = 0;
+  int    dislikes    = 0;
 
   static Future<String> getRandomDogUrl() async {
     const dogEndpoint = 'https://dog.ceo/api/breeds/image/random';
@@ -65,8 +67,8 @@ class _RandomDogImageState extends State<RandomDogImage> {
         
         const Text("press dog to get new dog"),
 
-        const DisplayLikes(),
-        const DisplayLikes(forDislikes: true),
+        DisplayLikes(numLikes: likes),
+        DisplayLikes(numLikes: dislikes, forDislikes: true),
 
 
       ]
