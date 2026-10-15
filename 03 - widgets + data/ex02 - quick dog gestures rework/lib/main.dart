@@ -75,15 +75,16 @@ class _RandomDogImageState extends State<RandomDogImage> {
           height: 300,
           child: dogImageUrl.isEmpty 
             ? const Text("Loading dog...")
-            : Image.network(dogImageUrl)
+            : GestureDetector(
+                onTap: fetchNewDog,
+                child: Image.network(dogImageUrl)
+            ),
         ),
 
         const SizedBox(height: 24),
+        
+        const Text("press dog to get new dog"),
 
-        ElevatedButton(
-          onPressed: fetchNewDog,
-          child: const Text("fetch new dog (I don't like mine. I want to trade it in)")
-        )
       ]
     );
   }
