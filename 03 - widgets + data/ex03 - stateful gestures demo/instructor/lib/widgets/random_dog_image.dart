@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart';
 
+import './display_likes.dart'; // you don't need to ./ but can if you want
+
 
 class RandomDogImage extends StatefulWidget {
 
@@ -62,6 +64,10 @@ class _RandomDogImageState extends State<RandomDogImage> {
         const SizedBox(height: 24),
         
         const Text("press dog to get new dog"),
+
+        const DisplayLikes(),
+        const DisplayLikes(forDislikes: true),
+
 
       ]
     );
