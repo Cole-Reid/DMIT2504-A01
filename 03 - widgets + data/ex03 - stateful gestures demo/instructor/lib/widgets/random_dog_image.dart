@@ -38,6 +38,35 @@ class _RandomDogImageState extends State<RandomDogImage> {
     setState(() { dogImageUrl = url; });
   }
 
+  Widget _buildDogImage() {
+    return GestureDetector(
+      onTap: () {
+        getRandomDogUrl().then(
+          (url) {
+            setState(() {
+              dogImageUrl = url;
+              likes += 1;
+            });
+          });
+      },
+      onLongPress: () {
+        getRandomDogUrl().then(
+          (url) {
+            setState(() {
+              dogImageUrl = url;
+              dislikes += 1;
+            });
+          });
+      },
+      child: SizedBox(
+        height: 300,
+        child: dogImageUrl.isEmpty 
+          ? const Text("Loading dog...")
+          : Image.network(dogImageUrl)
+      ),
+    );
+  }
+
 
   @override
   void initState() {
@@ -52,44 +81,11 @@ class _RandomDogImageState extends State<RandomDogImage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[   
-        // something to watch for: be careful to always use setState when you're 
-        // mutating stateful data. in this case, likes/dislikes are being changed without setState
-        // but the component still re-renders, because fetchNewDog() *does* use setState.
-        GestureDetector(
-          onTap: () {
-            getRandomDogUrl().then(
-              (url) {
-                setState(() {
-                  dogImageUrl = url;
-                  likes += 1;
-                });
-              });
-          },
-          onLongPress: () {
-            getRandomDogUrl().then(
-              (url) {
-                setState(() {
-                  dogImageUrl = url;
-                  dislikes += 1;
-                });
-              });
-          },
-          child: SizedBox(
-            height: 300,
-            child: dogImageUrl.isEmpty 
-              ? const Text("Loading dog...")
-              : Image.network(dogImageUrl)
-          ),
-        ),
-
+        _buildDogImage(),
         const SizedBox(height: 24),
-        
         const Text("press dog to get new dog"),
-
         DisplayLikes(numLikes: likes),
         DisplayLikes(numLikes: dislikes, forDislikes: true),
-
-
       ]
     );
   }
