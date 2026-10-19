@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
           headlineLarge: TextStyle(
             fontSize: 44,
             color: colorScheme.primary,
+            fontFamily: 'Playwrite GB J Guides',
           ),
           titleLarge: TextStyle(
             fontSize: 24,
@@ -54,11 +55,18 @@ class RecipePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final border = BorderSide(
+      color: Theme.of(context).colorScheme.primary,
+      width: 6,
+    );
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch, // like a flexbox!
                             // .stretch alignment means children fill the entire width
         children: [
+
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
@@ -67,27 +75,47 @@ class RecipePage extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
           ),
-          Image.asset(
-            'assets/images/cool.jpg',
-            height: 480,
+
+          Container(
+            decoration: BoxDecoration(
+              //border: Border(top: border, bottom: border),
+              border: Border.symmetric(horizontal: border),
+            ),
+            child: Image.asset(
+              'assets/images/cool.jpg',
+              height: 480,
+              fit: BoxFit.cover,
+            ),
           ),
-          const ListWithHeading(
-            heading: "Ingredients",
-            listItems: [
-              "- some ingredient",
-              "- some ingredient",
-              "- some ingredient",
-              "- some ingredient",
-              "- some ingredient",
-            ]
-          ),
-          const ListWithHeading(
-            heading: "Instructions",
-            listItems: [
-              '1. take your cream and behold it',
-              '2. whip it good',
-              '3. dip a strawberry',
-            ]
+
+          // let's keep the image pinned & the text contents scrollable:
+          const Expanded( // child(ren) fill the main axis (horiz. or vert.)
+            // try removing the Expanded wrapping - scrolling no longer works!
+            // you need flex behaviour for the children to auto-expand, rather than be cut off 
+            child: SingleChildScrollView( // just one simple option! we'll look at others later on.
+              child: Column(
+                children: [
+                    ListWithHeading(
+                    heading: "Ingredients",
+                    listItems: [
+                      "- some ingredient",
+                      "- some ingredient",
+                      "- some ingredient",
+                      "- some ingredient",
+                      "- some ingredient",
+                    ]
+                  ),
+                  ListWithHeading(
+                    heading: "Instructions",
+                    listItems: [
+                      '1. take your cream and behold it',
+                      '2. whip it good',
+                      '3. dip a strawberry',
+                    ]
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
