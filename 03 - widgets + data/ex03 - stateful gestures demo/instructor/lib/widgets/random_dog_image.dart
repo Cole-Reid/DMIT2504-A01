@@ -38,25 +38,29 @@ class _RandomDogImageState extends State<RandomDogImage> {
     setState(() { dogImageUrl = url; });
   }
 
+  Future<void> _getNextDog() async {
+    final url = await getRandomDogUrl();
+    if (!mounted) return; // if component isn't (re-)rendered back into the element tree, gtfo
+    setState(() { dogImageUrl = url; });
+  }
+
   Widget _buildDogImage() {
     return GestureDetector(
+      // depending on the device, you may still see counts incrementing in multiples before seeing a new image;
+      // there may be a tiny, imperceptible delay between element reloading into tree & browser/client/device actually rendering image
       onTap: () {
-        getRandomDogUrl().then(
-          (url) {
-            setState(() {
-              dogImageUrl = url;
-              likes += 1;
-            });
-          });
+        setState(() => likes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
+        _getNextDog();
+      },
+      onDoubleTap: () {
+        // "super-like" - when I add a double tap, single-tap events process a little slower, because flutter is waiting to see if it becomes a doubletap
+        // this is only relevant in a case where you WANT to allow taps to happen as fast as possible
+        setState(() => likes += 2);
+        _getNextDog();
       },
       onLongPress: () {
-        getRandomDogUrl().then(
-          (url) {
-            setState(() {
-              dogImageUrl = url;
-              dislikes += 1;
-            });
-          });
+        setState(() => dislikes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
+        _getNextDog();
       },
       child: SizedBox(
         height: 300,
