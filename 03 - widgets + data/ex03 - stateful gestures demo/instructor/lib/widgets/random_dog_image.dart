@@ -48,18 +48,29 @@ class _RandomDogImageState extends State<RandomDogImage> {
     return GestureDetector(
       // depending on the device, you may still see counts incrementing in multiples before seeing a new image;
       // there may be a tiny, imperceptible delay between element reloading into tree & browser/client/device actually rendering image
-      onTap: () {
-        setState(() => likes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
-        _getNextDog();
-      },
-      onDoubleTap: () {
-        // "super-like" - when I add a double tap, single-tap events process a little slower, because flutter is waiting to see if it becomes a doubletap
-        // this is only relevant in a case where you WANT to allow taps to happen as fast as possible
-        setState(() => likes += 2);
-        _getNextDog();
-      },
-      onLongPress: () {
-        setState(() => dislikes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
+      // onTap: () {
+      //   setState(() => likes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
+      //   _getNextDog();
+      // },
+      // onDoubleTap: () {
+      //   // "super-like" - when I add a double tap, single-tap events process a little slower, because flutter is waiting to see if it becomes a doubletap
+      //   // this is only relevant in a case where you WANT to allow taps to happen as fast as possible
+      //   setState(() => likes += 2);
+      //   _getNextDog();
+      // },
+      // onLongPress: () {
+      //   setState(() => dislikes += 1); // I can use () => value; instead of () { logic }; in a callback if I'm just returning a new value
+      //   _getNextDog();
+      // },
+      onHorizontalDragEnd: (details) { // unlike a click, where we don't care about event details, we do for drags
+        final velocity = details.primaryVelocity ?? 0; // primaryVelocity is nullable, so I want it to be zero if so
+        if (velocity > 0) { // positivelocity: rightwards drag
+          setState(() => likes += 1);
+          print("swiped right");
+        } else if (velocity < 0) { // negative velocity: leftwards drag
+          setState(() => dislikes += 1);
+          print("swiped left");
+        }
         _getNextDog();
       },
       child: SizedBox(
