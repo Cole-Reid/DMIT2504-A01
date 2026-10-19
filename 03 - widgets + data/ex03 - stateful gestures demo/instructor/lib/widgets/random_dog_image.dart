@@ -52,15 +52,34 @@ class _RandomDogImageState extends State<RandomDogImage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[   
-
-        SizedBox(
-          height: 300,
-          child: dogImageUrl.isEmpty 
-            ? const Text("Loading dog...")
-            : GestureDetector(
-                onTap: fetchNewDog,
-                child: Image.network(dogImageUrl)
-            ),
+        // something to watch for: be careful to always use setState when you're 
+        // mutating stateful data. in this case, likes/dislikes are being changed without setState
+        // but the component still re-renders, because fetchNewDog() *does* use setState.
+        GestureDetector(
+          onTap: () {
+            getRandomDogUrl().then(
+              (url) {
+                setState(() {
+                  dogImageUrl = url;
+                  likes += 1;
+                });
+              });
+          },
+          onLongPress: () {
+            getRandomDogUrl().then(
+              (url) {
+                setState(() {
+                  dogImageUrl = url;
+                  dislikes += 1;
+                });
+              });
+          },
+          child: SizedBox(
+            height: 300,
+            child: dogImageUrl.isEmpty 
+              ? const Text("Loading dog...")
+              : Image.network(dogImageUrl)
+          ),
         ),
 
         const SizedBox(height: 24),
