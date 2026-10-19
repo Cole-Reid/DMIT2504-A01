@@ -53,14 +53,22 @@ class _RandomDogImageState extends State<RandomDogImage> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[   
 
-        SizedBox(
-          height: 300,
-          child: dogImageUrl.isEmpty 
-            ? const Text("Loading dog...")
-            : GestureDetector(
-                onTap: fetchNewDog,
-                child: Image.network(dogImageUrl)
-            ),
+        GestureDetector(
+          onTap: () {
+            print('tap!');
+          },  // React (web) analogue: <SomeComponent onClick={() => {}}
+          onLongPress: () {
+            print("long press!");
+          },
+          child: SizedBox(
+            height: 300,
+            child: dogImageUrl.isEmpty 
+              ? const Text("Loading dog...")
+              : GestureDetector(
+                  onTap: fetchNewDog,
+                  child: Image.network(dogImageUrl)
+              ),
+          ),
         ),
 
         const SizedBox(height: 24),
