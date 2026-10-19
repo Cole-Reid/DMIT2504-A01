@@ -57,19 +57,22 @@ class _RandomDogImageState extends State<RandomDogImage> {
         // but the component still re-renders, because fetchNewDog() *does* use setState.
         GestureDetector(
           onTap: () {
-            // fix: onTap was not working but onLongPress (and any other gesture detection) was, because
-            //      I had an onTap downwards in the tree directly around the image itself. That onTap handler
-            //      overwrote this one.
-            fetchNewDog();
-            likes += 1;
-            // note also: despite the state change (and *expected* re-render) occurring before the likes+=1,
-            //            you still see the new number re-rendered. -> flutter re-renders at the end of a code block
-            //            as a performance optimisation.
-          },  // React (web) analogue: <SomeComponent onClick={() => {}}
+            getRandomDogUrl().then(
+              (url) {
+                setState(() {
+                  dogImageUrl = url;
+                  likes += 1;
+                });
+              });
+          },
           onLongPress: () {
-            fetchNewDog();
-            dislikes += 1;
-            print("dislikes: $dislikes");
+            getRandomDogUrl().then(
+              (url) {
+                setState(() {
+                  dogImageUrl = url;
+                  dislikes += 1;
+                });
+              });
           },
           child: SizedBox(
             height: 300,
