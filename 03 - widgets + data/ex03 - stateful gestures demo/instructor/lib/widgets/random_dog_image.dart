@@ -52,22 +52,30 @@ class _RandomDogImageState extends State<RandomDogImage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[   
-
+        // something to watch for: be careful to always use setState when you're 
+        // mutating stateful data. in this case, likes/dislikes are being changed without setState
+        // but the component still re-renders, because fetchNewDog() *does* use setState.
         GestureDetector(
           onTap: () {
-            print('tap!');
+            // fix: onTap was not working but onLongPress (and any other gesture detection) was, because
+            //      I had an onTap downwards in the tree directly around the image itself. That onTap handler
+            //      overwrote this one.
+            fetchNewDog();
+            likes += 1;
+            // note also: despite the state change (and *expected* re-render) occurring before the likes+=1,
+            //            you still see the new number re-rendered. -> flutter re-renders at the end of a code block
+            //            as a performance optimisation.
           },  // React (web) analogue: <SomeComponent onClick={() => {}}
           onLongPress: () {
-            print("long press!");
+            fetchNewDog();
+            dislikes += 1;
+            print("dislikes: $dislikes");
           },
           child: SizedBox(
             height: 300,
             child: dogImageUrl.isEmpty 
               ? const Text("Loading dog...")
-              : GestureDetector(
-                  onTap: fetchNewDog,
-                  child: Image.network(dogImageUrl)
-              ),
+              : Image.network(dogImageUrl)
           ),
         ),
 
