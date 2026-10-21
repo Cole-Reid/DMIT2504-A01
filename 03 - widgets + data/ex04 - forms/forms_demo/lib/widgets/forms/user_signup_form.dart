@@ -3,9 +3,17 @@ import 'package:flutter/material.dart';
 
 // To set up a form, we 1) convert all our fields to formfields, 2) wrap everything in a Form.
 // The point here is, all formfields within a form will validate at the same time when the form submission/validation is triggered.
-class UserSignupForm extends StatelessWidget {
+class UserSignupForm extends StatefulWidget {
 
   const UserSignupForm({super.key});
+
+  @override
+  State<UserSignupForm> createState() => _UserSignupFormState();
+
+}
+
+
+class _UserSignupFormState extends State<UserSignupForm> {
 
   FormFieldValidator<String?> requiredField(String fieldname) {
     // ternary gang!    condition ? ifTrue : ifFalse
@@ -39,7 +47,7 @@ class UserSignupForm extends StatelessWidget {
             decoration: InputDecoration(label: Text('Password')),
           ),
 
-          TextButton(
+          ElevatedButton( // this is just for me; I like how it looks better and this doesn't affect behaviour
             style: TextButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Colors.white,
