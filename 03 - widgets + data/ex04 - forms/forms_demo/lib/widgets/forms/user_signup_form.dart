@@ -67,7 +67,9 @@ class _UserSignupFormState extends State<UserSignupForm> {
                   _formKey.currentState.validate() is not valid because .currentState() is nullable (mouse over it) -> null.validate() doesn't exist.
                   *we* 'know' that we'll always get correctly formed state because our Form is wired up to its key properly.
               */
-                print("so valid!");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Sending your login information to the FBI!"))
+                );
               }
             },
             child: const Text('Sign Up'),
