@@ -7,6 +7,15 @@ class UserSignupForm extends StatelessWidget {
 
   const UserSignupForm({super.key});
 
+  FormFieldValidator<String?> requiredField(String fieldname) {
+    // ternary gang!    condition ? ifTrue : ifFalse
+    // You've noticed callbacks in flutter are usually () {} instead of () => {} as in JS.
+    // You use () {} when returning a code block, or () => someValue when returning a value directly.
+    return (value) => value == null || value.trim().isEmpty 
+      ? '$fieldname cannot be empty'  // check fails  -> return error message
+      : null;                       // check passes -> return null
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -16,15 +25,9 @@ class UserSignupForm extends StatelessWidget {
 
           const Text('New User Form', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
 
-          // every formfield has a validator.
-          // it's a conditional expression that returns a value for the error message if failed, or null if succeeded
           TextFormField(
-            // ternary gang!    condition ? ifTrue : ifFalse
-            // You've noticed callbacks in flutter are usually () {} instead of () => {} as in JS.
-            // You use () {} when returning a code block, or () => someValue when returning a value directly.
-            validator: (value) => value == null || value.trim().isEmpty   // a.k.a. field is required
-              ? 'Username cannot be empty'                                // check fails  -> return error message
-              : null,                                                     // check passes -> return null 
+          // every formfield has a validator: a conditional expression that returns a value for the error message if failed, or null if succeeded
+            validator: requiredField('Username'),                                          
             decoration: InputDecoration(label: Text('Username')),
           ),
 
@@ -32,9 +35,7 @@ class UserSignupForm extends StatelessWidget {
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
-            validator: (value) => value == null || value.trim().isEmpty
-              ? 'Username cannot be empty'
-              : null,
+            validator: requiredField('Password'),                                          
             decoration: InputDecoration(label: Text('Password')),
           ),
 
