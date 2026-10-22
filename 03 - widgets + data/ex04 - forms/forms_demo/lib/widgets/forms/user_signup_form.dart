@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'fields/username_field.dart';
 import 'fields/password_field.dart';
+import 'fields/checkbox_field.dart';
 
 
 // To set up a form, we 1) convert all our fields to formfields, 2) wrap everything in a Form.
@@ -29,6 +30,8 @@ class _UserSignupFormState extends State<UserSignupForm> {
     final _passwordController = TextEditingController();
     // unfortunately & imo unjustifiably, we can't read stateful values directly from the fields;
     // we need these to be able to do that (and then e.g. POST those values to a backend).
+
+    bool _rememberMe = false;
 
     @override
     void dispose() { // {widget}.dispose() is a teardown method that runs when a widget unmounts
@@ -58,9 +61,16 @@ class _UserSignupFormState extends State<UserSignupForm> {
 
           const Text('New User Form', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
 
+          // These custom fields were written "the easy way" to show you how to subclass existing formfields
+          // that you want to customise but reuse.
           UsernameField(controller: _usernameController),
-
           PasswordField(controller: _passwordController),
+
+          // I could also have just written uname/pw fields this way too; then I wouldn't need controllers (or any assoc'd code) either.
+          // I would just have state for each field that lives in the form.
+          RememberMeField(
+            onSaved: (value) => _rememberMe = value ?? false,
+          ),
 
           ElevatedButton( // this is just for me; I like how it looks better and this doesn't affect behaviour
             style: TextButton.styleFrom(
@@ -76,7 +86,11 @@ class _UserSignupFormState extends State<UserSignupForm> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      "Sending your login information to the FBI!\nu: ${_usernameController.text}\np: ${_passwordController.text}"
+                      """Sending your login information to the FBI!
+                      u: ${_usernameController.text}
+                      p: ${_passwordController.text}
+                      remember me? 
+                      """
                     )
                   )
                 );
