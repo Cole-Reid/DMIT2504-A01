@@ -17,11 +17,24 @@ class _UserSignupFormState extends State<UserSignupForm> {
 
   // objectively horrible language design, but necessary to access the form & its contents after it's been instantiated
   final _formKey = GlobalKey<FormState>(); // just remember to call an instance of it (); we want Key<T>() instance, not Key<T> type definition
-
   /* This is just something annoying you have to memorise and include when you use a form.
       a) we need a unique identifier for the form & be able to reference it to e.g. validate & submit
       b) we also need to give it state that is separate & contained from the State<T> of the widget e.g. _UserSignupFormState
   */
+
+    final _usernameController = TextEditingController();
+    final _passwordController = TextEditingController();
+    // unfortunately & imo unjustifiably, we can't read stateful values directly from the fields;
+    // we need these to be able to do that (and then e.g. POST those values to a backend).
+
+    @override
+    void dispose() { // {widget}.dispose() is a teardown method that runs when a widget unmounts
+      // kind of like cleaning up event listeners - listeners, device-native text editing state, etc. don't automatically get cleaned up. classic memory leak noob trap
+      _usernameController.dispose();
+      _passwordController.dispose();
+      super.dispose(); // note: i'm doing the parent class (generic state)'s cleanup method LAST
+    }
+
 
   FormFieldValidator<String?> requiredField(String fieldname) {
     // ternary gang!    condition ? ifTrue : ifFalse
@@ -43,12 +56,14 @@ class _UserSignupFormState extends State<UserSignupForm> {
           const Text('New User Form', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
 
           TextFormField(
-          // every formfield has a validator: a conditional expression that returns a value for the error message if failed, or null if succeeded
+            // every formfield has a validator: a conditional expression that returns a value for the error message if failed, or null if succeeded
+            controller: _usernameController,
             validator: requiredField('Username'),                                          
             decoration: InputDecoration(label: Text('Username')),
           ),
 
           TextFormField(
+            controller: _passwordController,
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
@@ -68,7 +83,11 @@ class _UserSignupFormState extends State<UserSignupForm> {
                   *we* 'know' that we'll always get correctly formed state because our Form is wired up to its key properly.
               */
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Sending your login information to the FBI!"))
+                  SnackBar(
+                    content: Text(
+                      "Sending your login information to the FBI!\nu: ${_usernameController.text}\np: ${_passwordController.text}"
+                    )
+                  )
                 );
               }
             },
