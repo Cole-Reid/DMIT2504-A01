@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'fields/username_field.dart';
+import 'fields/password_field.dart';
+
 
 // To set up a form, we 1) convert all our fields to formfields, 2) wrap everything in a Form.
 // The point here is, all formfields within a form will validate at the same time when the form submission/validation is triggered.
@@ -36,14 +39,14 @@ class _UserSignupFormState extends State<UserSignupForm> {
     }
 
 
-  FormFieldValidator<String?> requiredField(String fieldname) {
-    // ternary gang!    condition ? ifTrue : ifFalse
-    // You've noticed callbacks in flutter are usually () {} instead of () => {} as in JS.
-    // You use () {} when returning a code block, or () => someValue when returning a value directly.
-    return (value) => value == null || value.trim().isEmpty 
-      ? '$fieldname cannot be empty'  // check fails  -> return error message
-      : null;                       // check passes -> return null
-  }
+  // FormFieldValidator<String?> requiredField(String fieldname) {
+  //   // ternary gang!    condition ? ifTrue : ifFalse
+  //   // You've noticed callbacks in flutter are usually () {} instead of () => {} as in JS.
+  //   // You use () {} when returning a code block, or () => someValue when returning a value directly.
+  //   return (value) => value == null || value.trim().isEmpty 
+  //     ? '$fieldname cannot be empty'  // check fails  -> return error message
+  //     : null;                       // check passes -> return null
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +58,9 @@ class _UserSignupFormState extends State<UserSignupForm> {
 
           const Text('New User Form', style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
 
-          TextFormField(
-            // every formfield has a validator: a conditional expression that returns a value for the error message if failed, or null if succeeded
-            controller: _usernameController,
-            validator: requiredField('Username'),                                          
-            decoration: InputDecoration(label: Text('Username')),
-          ),
+          UsernameField(controller: _usernameController),
 
-          TextFormField(
-            controller: _passwordController,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            validator: requiredField('Password'),                                          
-            decoration: InputDecoration(label: Text('Password')),
-          ),
+          PasswordField(controller: _passwordController),
 
           ElevatedButton( // this is just for me; I like how it looks better and this doesn't affect behaviour
             style: TextButton.styleFrom(
