@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 
 class OtherPage extends StatelessWidget {
 
@@ -13,7 +12,9 @@ class OtherPage extends StatelessWidget {
           const Text('This is another page!'),
           ElevatedButton(
             onPressed: () {
-              print("when I'm clicked, take me back to the homepage.");
+              // going back is easy! we just pop() without needing specifics
+              // -> if we want to go back, we just have to wipe the current route off the top of the stack
+              Navigator.of(context).pop();
             },
             child: const Text("go back"),
           ),
