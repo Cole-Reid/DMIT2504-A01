@@ -13,7 +13,9 @@ class Home extends StatefulWidget {
 }
 
 
-class _HomeState extends State<Home> { 
+class _HomeState extends State<Home> {
+
+  late String data = '';
 
   @override build(BuildContext context) {
     return Scaffold(
@@ -35,11 +37,17 @@ class _HomeState extends State<Home> {
           const SizedBox(height: 32),
 
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/returned-data');
+            onPressed: () async {
+              // the widget I'm routing to pops a string back, so that's the type of its returned value
+              String returnedData = await Navigator.of(context).pushNamed('/returned-data') as String;
+              setState(() {
+                data = returnedData;
+              });
             },
             child: const Text("go to page and back to see returned data"),
           ),
+
+          data.isEmpty ? const Text('No data received yet.') : Text('Data received:\n$data') 
 
         ]
       ),
