@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'other_page.dart';
-// objectively bad (tightly coupled components): see button onPressed handler below
+// no more gross tight coupling
 
 
 class Home extends StatelessWidget {
@@ -30,11 +29,7 @@ class Home extends StatelessWidget {
               */
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) {
-                  // borderline digusting: tight coupling of widgets/components/modular elements.
-                  // imagine if instead of 1 other page, we had 30 pages, and they *all* routed to each other!
-                  return const OtherPage();
-                  // (why are you showing me something bad I shouldn't use?)
-                  // -> this is just to illustrate routing at the simplest level (push forward & pop backward)
+                  print("replace me with better routing!");
                 }));
 
             },

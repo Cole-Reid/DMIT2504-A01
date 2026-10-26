@@ -12,8 +12,7 @@ class OtherPage extends StatelessWidget {
           const Text('This is another page!'),
           ElevatedButton(
             onPressed: () {
-              // going back is easy! we just pop() without needing specifics
-              // -> if we want to go back, we just have to wipe the current route off the top of the stack
+              // this can stay as-is; again, .pop() doesn't need to care about specifics
               Navigator.of(context).pop();
             },
             child: const Text("go back"),
