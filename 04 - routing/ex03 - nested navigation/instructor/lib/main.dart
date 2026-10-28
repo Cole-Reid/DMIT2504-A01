@@ -26,6 +26,15 @@ class MainApp extends StatelessWidget {
             // this is a lot of boilerplate for simple routing, but e.g. being inside a function
             // lets me fire other behaviour I might want to (e.g. prefetching data?) for a specific route
             break;
+            /* What I want to end up with is the top-level router knowing *only* about the profile section as one route,
+               *not* every single subpage in it.
+
+               The profile subsection of the app (and all its pages) will handle its own routing within that set of pages.
+              e.g. :
+          case profileRoute:
+            page: const ProfilePage();  // NOT every single page/route in profile submodule of the app
+            break;          
+            */
           default:
             throw Exception('Unknown route: ${settings.name}');
         }
