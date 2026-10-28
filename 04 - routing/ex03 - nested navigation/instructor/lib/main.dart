@@ -14,13 +14,27 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        /* I'm now declaring routes by variable name rather than '/some-string'
-           which might seem like silly 'bureaucracy' but:
-             - simple, descriptive variable names are easier to read than potentially complicated URL paths, and
-             - MORE IMPORTANTLY, a typo or issue with a route now becomes a *compile-time* error rather than a runtime one. 
-        */
-        homeRoute: (context) => const HomePage(),
+      onGenerateRoute: (settings) {
+        // settings is like context, but for routing info only.
+        // it carries settings.name (the name of the route) and settings.arguments (args we can pass to the router)
+        Widget page;
+
+        // match to routes we have & (optionally) fire any other behaviour for that route
+        switch (settings.name) {
+          case homeRoute:
+            page = const HomePage();
+            // this is a lot of boilerplate for simple routing, but e.g. being inside a function
+            // lets me fire other behaviour I might want to (e.g. prefetching data?) for a specific route
+            break;
+          default:
+            throw Exception('Unknown route: ${settings.name}');
+        }
+
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => page,
+          settings: settings, // pass down route info to the next thing (route name + route args) 
+        );
+
       },
     );
   }
