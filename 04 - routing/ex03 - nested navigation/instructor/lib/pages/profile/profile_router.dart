@@ -7,6 +7,10 @@ import 'profile_options1.dart';
 import 'profile_options2.dart';
 import 'profile_options3.dart';
 
+
+// instead of importing every little route/widget in my top-level router,
+// I now have this ProfileRouter() I can pass instead, which will dynamically generate the route
+// (and therefore determine what needs to be rendered) whenever profile/ or anything inside profile/ is hit as a route.
 class ProfileRouter extends StatefulWidget {
 
   const ProfileRouter({super.key});
