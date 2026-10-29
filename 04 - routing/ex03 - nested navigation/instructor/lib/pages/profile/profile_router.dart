@@ -19,11 +19,40 @@ class ProfileRouter extends StatefulWidget {
 
 class _ProfileRouterState extends State<ProfileRouter> {
 
+  // we need to have a persistent way to reference this navigator across rebuilds
+  // when we create our own new stateful things (new navigator, form, etc.) we gotta supply that key
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Profile")),
+      body: Navigator(
+        key: _navigatorKey,
+        initialRoute: profileHomeRoute,
+        onGenerateRoute: _onGenerateRoute,
+      ),
     );
+  }
+
+  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+
+    Widget page;
+
+    // boilerplate is the same as the main.dart functional router
+    switch (settings.name) {
+      case profileHomeRoute:
+        page = const ProfilePage();
+        break;
+      default:
+        throw Exception('Unknown profile route: ${settings.name}');
+    }
+
+    return MaterialPageRoute<dynamic>(
+      builder: (context) => page,
+      settings: settings,  // pass settings to next route (contains route name & args)
+    );
+
   }
 
 }
