@@ -44,6 +44,15 @@ class _ProfileRouterState extends State<ProfileRouter> {
       case profileHomeRoute:
         page = const ProfilePage();
         break;
+      case profileOptions1Route:
+        page = const ProfileOptions1();
+        break;
+      case profileOptions2Route:
+        page = const ProfileOptions2();
+        break;
+      case profileOptions3Route:
+        page = const ProfileOptions3();
+        break;
       default:
         throw Exception('Unknown profile route: ${settings.name}');
     }
